@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto mt-8">
+    <div class="w-full max-w-2xl mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h1 class="text-2xl font-semibold mb-6 text-center">Edit Profile</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="mb-4">
+                <label for="id_bio" class="block text-sm font-medium text-gray-700">Bio</label>
+                <textarea name="bio" id="id_bio" rows="4" class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Share something about yourself...">{{ form.bio.value|default_if_none:'' }}</textarea>
+            </div>
+            
+            <div class="mb-4">
+                <label for="id_avatar" class="block text-sm font-medium text-gray-700">Avatar</label>
+                <input type="file" name="avatar" id="id_avatar" class="bg-gray-50 text-sm text-gray-900 rounded-lg border border-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                {% if form.avatar.value %}
+                <div class="mt-2">
+                    <img src="{{ form.avatar.value.url }}" alt="Current avatar" class="h-20 w-20 object-cover rounded-full">
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="flex items-center justify-between">
+                <button type="submit" class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-lg text-sm">
+                    Update Profile
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

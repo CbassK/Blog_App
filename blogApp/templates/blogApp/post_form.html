@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto mt-8">
+    <div class="w-full max-w-2xl mx-auto">
+        <h1 class="text-2xl font-semibold mb-6">{% if object %}Edit Post{% else %}New Post{% endif %}</h1>
+        <form method="post" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="mb-2">
+                <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.title.label }}</label>
+                <input type="text" id="title" name="title" value="{% if object %}{{ object.title }}{% endif %}" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Title" required>
+                {{ form.title.errors }}
+                <p class="text-red-500 text-xs italic">{{ form.title.help_text }}</p>
+            </div>
+            <div class="mb-2">
+                <label for="content" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.content.label }}</label>
+                <textarea id="content" name="content" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Content . . .">{% if object %}{{ object.content }}{% endif %}</textarea>
+                {{ form.content.errors }}
+                <p class="text-red-500 text-xs italic">{{ form.content.help_text }}</p>
+            </div>
+            <div class="mb-4">
+                <label for="tags" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ form.tags.label }}</label>
+                <select id="tags" name="tags" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    <option selected disabled>Choose a tag</option>
+                    {% for tag in form.tags %}
+                    <option {% if object and tag == object.tags %}selected{% endif %}>{{ tag }}</option>
+                    {% endfor %}
+                </select>
+                {{ form.tags.errors }}
+                <p class="text-red-500 text-xs italic">{{ form.tags.help_text }}</p>
+            </div>
+            <div class="flex items-center justify-between">
+                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    {% if object %}Update{% else %}Post{% endif %}
+                </button>
+                {% if object %}
+                <button type="button" id="deleteButton" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                    <a href="{% url 'post-delete' object.id %}" class="text-white">Delete</a>
+                </button>
+                {% endif %}
+                <a href="{% url 'post-list' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

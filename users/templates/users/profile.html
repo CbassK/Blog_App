@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto mt-10">
+    <div class="text-center">
+        {% if profile.avatar %}
+        <img src="{{ profile.avatar.url }}" alt="{{ profile.user.username }}'s profile picture" class="rounded-full h-24 w-24 object-cover mx-auto">
+        {% else %}
+        <img src="#" alt="Default profile picture" class="rounded-full h-24 w-24 object-cover mx-auto">
+        {% endif %}
+        <div class="text-center mt-4">
+            <h2 class="text-2xl font-semibold">{{ profile.user.username }} Profile</h2>
+            <h3 class="text-xl font-semibold mt-4">Bio</h3>
+            <p class="mt-2 mb-4">{{ profile.bio }}</p>
+            {% if request.user == profile.user %}
+            <a href="{% url 'profile-update' %}" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition">Edit Profile</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="mt-10 text-center">
+        <h3 class="text-2xl font-semibold mb-4">My Posts</h3>
+        <ul>
+            {% for post in profile.user.post_set.all %}
+            <li class="hover:text-blue-600"><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></li>
+            {% empty %}
+            <li>No posts created yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
